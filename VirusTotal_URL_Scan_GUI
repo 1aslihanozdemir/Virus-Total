@@ -1,0 +1,46 @@
+import requests
+import json
+from tkinter import *
+
+def url_kontrol_et():
+    url = 'https://www.virustotal.com/vtapi/v2/url/report'
+    params = {'apikey':'<api_key>','resource':  entry1.get() }
+    response = requests.get(url,params=params)
+    json_response = json.loads(response.text)
+    for item in json_response['scans']:
+        #print(item, " : ",json_response["scans"][item]['result'])
+        if "malicious" in json_response["scans"][item]['result']:
+            v.set("Malicious Site")
+        else:
+            v.set("Clean Site")
+            
+
+top = Tk()
+
+top.title("VirusTotal URL SCAN")
+
+B = Button(top,text="Scan",command=url_kontrol_et)
+B.place(x=100,y=80)
+B.pack()
+
+label1 = Label(top,text="Type URL: ")
+label1.place(x=100,y=100)
+label1.pack()
+
+entry1 = Entry(top)
+entry1.place(x=100,y=130)
+entry1.pack()
+
+label2 = Label(top,text="Result: ")
+label2.place(x=100,y=160)
+label2.pack()
+
+v= StringVar()
+entry2 = Entry(top,textvariable=v)
+entry2.place(x=100,y=190)
+entry2.pack()
+
+top.mainloop()
+
+
+
